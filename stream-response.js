@@ -7,6 +7,7 @@ const stopBtn = document.getElementById("stopBtn");
 const resultText = document.getElementById("resultText");
 
 let controller = null; // Store the AbortController instance
+let conversationHistory = []; // Store the conversation history
 
 const generate = async () => {
   // Alert the user if no prompt value
@@ -14,6 +15,9 @@ const generate = async () => {
     alert("Please enter a prompt.");
     return;
   }
+
+  // Add the user's input to the conversation history
+  conversationHistory.push({ role: "user", content: promptInput.value });
 
   // Disable the generate button and enable the stop button
   generateBtn.disabled = true;
@@ -34,7 +38,7 @@ const generate = async () => {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: promptInput.value }],
+        messages: conversationHistory,
         max_tokens: 100,
         stream: true, // For streaming responses
       }),
@@ -74,6 +78,8 @@ const generate = async () => {
         // Update the UI with the new content
         if (content) {
           resultText.innerText += content;
+          // Add the assistant's response to the conversation history
+          conversationHistory.push({ role: "assistant", content });
         }
       }
     }
