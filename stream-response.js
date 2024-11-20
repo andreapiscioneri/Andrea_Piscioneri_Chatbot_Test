@@ -93,6 +93,8 @@ const generate = async () => {
     }
   } finally {
     // Enable the generate button and disable the stop button
+    promptInput.value = "";
+    promptInput.disabled = false;
     generateBtn.disabled = false;
     stopBtn.disabled = true;
     controller = null; // Reset the AbortController instance
@@ -109,6 +111,7 @@ const stop = () => {
 
 promptInput.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
+    promptInput.disabled = true;
     generate();
   }
 });
