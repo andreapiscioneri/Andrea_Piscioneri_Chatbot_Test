@@ -53,6 +53,14 @@ const generate = async () => {
       }
       // Massage and parse the chunk of data
       const chunk = decoder.decode(value);
+      
+      // handle response error
+      if(chunk.includes("error")){
+        const json = JSON.parse(chunk);
+        resultText.innerText = `error: ${json.error.message}`;
+        break;
+      }
+
       const lines = chunk.split("\n");
       const parsedLines = lines
         .map((line) => line.replace(/^data: /, "").trim()) // Remove the "data: " prefix
